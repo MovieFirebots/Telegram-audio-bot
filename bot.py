@@ -1,18 +1,18 @@
 import os
 import subprocess
 from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # Path for saving files temporarily
 DOWNLOAD_PATH = "./downloads"
 os.makedirs(DOWNLOAD_PATH, exist_ok=True)
 
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text("Send me a file's download link, and I'll remove the audio and return the modified file!")
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Send me a file's download link, and I'll remove the audio and return the modified file!")
 
-def handle_link(update: Update, context: CallbackContext):
+async def handle_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
     url = update.message.text
-    update.message.reply_text("Downloading the file...")
+    await update.message.reply_text("Downloading the file...")
 
     try:
         # Download the file
@@ -21,26 +21,24 @@ def handle_link(update: Update, context: CallbackContext):
         subprocess.run(["wget", "-O", file_name, url], check=True)
 
         # Process the file with FFmpeg to remove audio
-        update.message.reply_text("Removing audio...")
+        await update.message.reply_text("Removing audio...")
         subprocess.run(["ffmpeg", "-i", file_name, "-an", output_file], check=True)
 
         # Send the processed file back
-        update.message.reply_document(document=open(output_file, "rb"))
-        update.message.reply_text("Here is your file without audio!")
+        await update.message.reply_document(document=open(output_file, "rb"))
+        await update.message.reply_text("Here is your file without audio!")
 
     except Exception as e:
-        update.message.reply_text(f"An error occurred: {e}")
+        await update.message.reply_text(f"An error occurred: {e}")
 
 def main():
     # Replace 'YOUR_API_TOKEN' with your bot's token
-    updater = Updater("YOUR_API_TOKEN", use_context=True)
-    dp = updater.dispatcher
+    app = Application.builder().token("YOUR_API_TOKEN").build()
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_link))
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_link))
 
-    updater.start_polling()
-    updater.idle()
+    app.run_polling()
 
 if __name__ == "__main__":
     main()
