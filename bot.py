@@ -19,6 +19,7 @@ async def run_bot():
 
     # Start polling
     await app.run_polling()
+    await app.run_polling(close_loop=False)
 
 # Flask Server for Render
 server = Flask(__name__)
