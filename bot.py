@@ -12,7 +12,7 @@ async def handle_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Processing your request...")
 
 async def run_bot():
-    app = Application.builder().token(os.getenv("YOUR_API_TOKEN")).build()
+    app = Application.builder().token(os.getenv("7942663275:AAF4tVFv8VA7EpUmrGDPJVMXflwa1zku7LY")).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_link))
@@ -34,7 +34,7 @@ if __name__ == "__main__":
     loop.create_task(run_bot())
     
     # Get the port from the environment (Render sets it)
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
     server.run(host="0.0.0.0", port=port) 
 
 import logging
