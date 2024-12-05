@@ -33,7 +33,7 @@ async def handle_link(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     # Replace 'YOUR_API_TOKEN' with your bot's token
-    app = Application.builder().token("YOUR_API_TOKEN").build()
+    app = Application.builder().token("7942663275:AAF4tVFv8VA7EpUmrGDPJVMXflwa1zku7LY").build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_link))
