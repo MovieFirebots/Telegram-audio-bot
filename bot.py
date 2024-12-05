@@ -35,3 +35,16 @@ if __name__ == "__main__":
     # Get the port from the environment (Render sets it)
     port = int(os.environ.get("PORT", 5000))
     server.run(host="0.0.0.0", port=port) 
+
+import logging
+
+# Set up logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
+
+# Add a log message in the start handler
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    logger.info(f"Received /start from {update.effective_user.username}")
+    await update.message.reply_text("Send me a file's download link!")
