@@ -1,2 +1,3 @@
 #!/bin/bash
-python3 bot.py
+export YOUR_API_TOKEN="YOUR_ACTUAL_BOT_TOKEN"
+python bot.py
